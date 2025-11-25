@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-//import { PrismaClient } from "./generated/prisma/client.js";
+import { PrismaClient } from "./generated/prisma/client.js";
 
 dotenv.config();
 
 const app = express();
-//const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 //const secret = process.env.JWT_SECRET;
 
 app.use(express.json());
