@@ -14,9 +14,33 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model List {
+    id     Int     @id @default(autoincrement())
+    name   String  @unique
+    public Boolean @default(false)
+
+    movies Movie[]
+}
+
+model Movie {
+    id     Int     @id @default(autoincrement())
+    name   String  @unique
+    genre  String
+    public Boolean @default(false)
+    img    String
+    year   Int
+
+    userId Int
+    user   User @relation(fields: [userId], references: [id])
+
+    lists List[]
+}
+
 model User {
     id       Int    @id @default(autoincrement())
     email    String @unique
     username String @unique
     password String
+
+    movies Movie[]
 }
