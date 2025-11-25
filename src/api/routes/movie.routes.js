@@ -43,6 +43,8 @@ const router = Router();
  *               public:
  *                 type: boolean
  *                 default: false
+ *               rating:
+ *                 type: number
  *     responses:
  *       201:
  *         description: Movie created successfully

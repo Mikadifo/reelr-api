@@ -9,4 +9,10 @@ export const newMovieSchema = Yup.object().shape({
     .min(1800, "Year too old, must be >= 1800")
     .max(new Date().getFullYear(), "Year cannot be in the future")
     .required("Year required"),
+  rating: Yup.number()
+    .integer("Rating must be an integer")
+    .min(1, "Rating msut be at least 1")
+    .max(5, "Rating cannot exceed 5")
+    .nullable()
+    .notRequired(),
 });

@@ -29,6 +29,7 @@ model Movie {
     public Boolean @default(false)
     img    String
     year   Int
+    rating Int?
 
     userId Int
     user   User @relation(fields: [userId], references: [id])
