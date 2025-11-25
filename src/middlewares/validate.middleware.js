@@ -1,6 +1,10 @@
 const validate = (schema) => async (req, res, next) => {
   try {
-    req.body = await schema.validate(req.body, { abortEarly: false });
+    const casted = schema.cast(req.body);
+    await schema.validate(casted, { abortEarly: false });
+
+    req.body = casted;
+
     next();
   } catch (error) {
     res.status(400).json({ errors: error.errors });
