@@ -1,13 +1,10 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import { PrismaClient } from "./generated/prisma/client.js";
-
-dotenv.config();
+import routes from "./src/api/index.js";
+import setUpSwagger from "./src/config/swagger.js";
+import errorHandler from "./src/middlewares/errorHandler.middleware.js";
 
 const app = express();
-const prisma = new PrismaClient();
-//const secret = process.env.JWT_SECRET;
 
 app.use(express.json());
 app.use(
@@ -18,9 +15,10 @@ app.use(
   }),
 );
 
-app.get("/", (_, res) => {
-  res.send("Hello!");
-});
+setUpSwagger(app);
+
+app.use("/api", routes);
+app.use(errorHandler);
 
 app.listen(8000, () => {
   console.log("Listening on port 8000...");
