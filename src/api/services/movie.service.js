@@ -24,6 +24,19 @@ const addMovie = async (movie) => {
   }
 };
 
+const getMovies = async ({ userId }) => {
+  try {
+    const movies = await prisma.movie.findMany({
+      where: { userId },
+    });
+
+    return movies;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   addMovie,
+  getMovies,
 };

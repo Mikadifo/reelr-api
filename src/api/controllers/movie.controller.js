@@ -16,3 +16,13 @@ export const addMovie = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getMovies = async (req, res, next) => {
+  try {
+    const movies = await movieService.getMovies({ userId: req.user.userId });
+
+    res.json(movies);
+  } catch (err) {
+    next(err);
+  }
+};
