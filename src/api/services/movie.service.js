@@ -36,7 +36,26 @@ const getMovies = async ({ userId }) => {
   }
 };
 
+const getMovie = async ({ userId, movieId }) => {
+  try {
+    const movie = await prisma.movie.findUnique({
+      where: { id: movieId, userId },
+    });
+
+    if (movie) {
+      return movie;
+    }
+
+    const error = new Error("Movie not found");
+    error.status = 404;
+    throw error;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   addMovie,
   getMovies,
+  getMovie,
 };

@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { addMovie, getMovies } from "../controllers/movie.controller.js";
+import {
+  addMovie,
+  getMovies,
+  getMovie,
+} from "../controllers/movie.controller.js";
 import { newMovieSchema } from "../schemas/movie.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
 import authMiddleware from "../../middlewares/auth.middleware.js";
@@ -74,5 +78,28 @@ router.post("/movies", authMiddleware, validate(newMovieSchema), addMovie);
  *         description: Unexpected error
  */
 router.get("/movies", authMiddleware, getMovies);
+
+/**
+ * @swagger
+ * /api/movies/{id}:
+ *   get:
+ *     tags: [Movie]
+ *     summary: Get user movie by id
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Movie fetched successfully
+ *       404:
+ *         description: Movie not found
+ *       500:
+ *         description: Unexpected error
+ */
+router.get("/movies/:id", authMiddleware, getMovie);
 
 export default router;

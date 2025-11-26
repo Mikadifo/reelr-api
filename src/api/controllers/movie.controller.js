@@ -9,10 +9,6 @@ export const addMovie = async (req, res, next) => {
 
     res.status(201).json(movie);
   } catch (err) {
-    if (err.status === 409) {
-      return res.status(409).json({ error: err.message });
-    }
-
     next(err);
   }
 };
@@ -22,6 +18,21 @@ export const getMovies = async (req, res, next) => {
     const movies = await movieService.getMovies({ userId: req.user.userId });
 
     res.json(movies);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getMovie = async (req, res, next) => {
+  try {
+    const movieId = Number(req.params.id);
+
+    const movie = await movieService.getMovie({
+      userId: req.user.userId,
+      movieId,
+    });
+
+    res.json(movie);
   } catch (err) {
     next(err);
   }
