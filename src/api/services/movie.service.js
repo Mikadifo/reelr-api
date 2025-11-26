@@ -77,7 +77,7 @@ const getPublicMovie = async ({ username, movieId }) => {
 
     const movie = await prisma.movie.findUnique({
       where: { id: movieId, public: true, userId: user.id },
-      select: { img: true, name: true, genre: true, year: true },
+      select: { img: true, name: true, genre: true, year: true, rating: true },
     });
 
     if (movie) {
