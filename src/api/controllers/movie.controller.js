@@ -69,3 +69,18 @@ export const updateMovie = async (req, res, next) => {
     next(err);
   }
 };
+
+export const deleteMovie = async (req, res, next) => {
+  try {
+    const movieId = Number(req.params.id);
+
+    await movieService.deleteMovie({
+      movieId,
+      userId: req.user.userId,
+    });
+
+    res.json("Movie deleted successfully");
+  } catch (err) {
+    next(err);
+  }
+};

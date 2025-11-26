@@ -5,6 +5,7 @@ import {
   getMovie,
   getPublicMovie,
   updateMovie,
+  deleteMovie,
 } from "../controllers/movie.controller.js";
 import { newMovieSchema } from "../schemas/movie.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
@@ -190,5 +191,29 @@ router.put(
   validate(newMovieSchema),
   updateMovie,
 );
+
+/**
+ * @swagger
+ * /api/movies/{id}:
+ *   delete:
+ *     tags: [Movie]
+ *     summary: Delete user movie by id
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         required: true
+ *         name: id
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Movie deleted successfully
+ *       404:
+ *         description: Movie not found
+ *       500:
+ *         description: Unexpected error
+ */
+router.delete("/movies/:id", authMiddleware, deleteMovie);
 
 export default router;

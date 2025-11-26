@@ -131,10 +131,28 @@ const updateMovie = async ({ movieId, userId, movie }) => {
   }
 };
 
+const deleteMovie = async ({ movieId, userId }) => {
+  try {
+    await prisma.movie.delete({
+      where: { id: movieId, userId },
+    });
+  } catch (err) {
+    if (err.code === PRISMA_NOT_FOUND) {
+      const error = new Error("Movie not found");
+      error.status = 404;
+
+      throw error;
+    }
+
+    throw err;
+  }
+};
+
 export default {
   addMovie,
   getMovies,
   getMovie,
   getPublicMovie,
   updateMovie,
+  deleteMovie,
 };
