@@ -3,6 +3,7 @@ import {
   addMovie,
   getMovies,
   getMovie,
+  getPublicMovie,
 } from "../controllers/movie.controller.js";
 import { newMovieSchema } from "../schemas/movie.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
@@ -78,6 +79,31 @@ router.post("/movies", authMiddleware, validate(newMovieSchema), addMovie);
  *         description: Unexpected error
  */
 router.get("/movies", authMiddleware, getMovies);
+
+/**
+ * @swagger
+ * /api/movies/{username}/{id}:
+ *   get:
+ *     tags: [Movie]
+ *     summary: Get public user movie by id
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Movie fetched successfully
+ *       404:
+ *         description: Movie not found
+ *       500:
+ *         description: Unexpected error
+ */
+router.get("/movies/:username/:id", getPublicMovie);
 
 /**
  * @swagger

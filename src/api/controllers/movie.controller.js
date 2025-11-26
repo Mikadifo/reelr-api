@@ -37,3 +37,19 @@ export const getMovie = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getPublicMovie = async (req, res, next) => {
+  try {
+    const username = String(req.params.username);
+    const movieId = Number(req.params.id);
+
+    const movie = await movieService.getPublicMovie({
+      username,
+      movieId,
+    });
+
+    res.json(movie);
+  } catch (err) {
+    next(err);
+  }
+};

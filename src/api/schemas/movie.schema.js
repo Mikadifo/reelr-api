@@ -16,3 +16,14 @@ export const newMovieSchema = Yup.object().shape({
     .nullable()
     .notRequired(),
 });
+
+export const publicMovieSchema = Yup.object().shape({
+  username: Yup.string()
+    .matches(/^[a-zA-Z0-9_]+$/, "Invalid username")
+    .required("Username required")
+    .max(50, "Username is too long"),
+  id: Yup.number()
+    .integer("id must be integer")
+    .positive("id must be positive")
+    .required("id required"),
+});
