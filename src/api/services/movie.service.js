@@ -40,6 +40,14 @@ const getMovie = async ({ userId, movieId }) => {
   try {
     const movie = await prisma.movie.findUnique({
       where: { id: movieId, userId },
+      include: {
+        lists: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
 
     if (movie) {
@@ -69,6 +77,7 @@ const getPublicMovie = async ({ username, movieId }) => {
 
     const movie = await prisma.movie.findUnique({
       where: { id: movieId, public: true, userId: user.id },
+      select: { img: true, name: true, genre: true, year: true },
     });
 
     if (movie) {
