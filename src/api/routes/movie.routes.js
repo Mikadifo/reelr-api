@@ -62,7 +62,7 @@ const router = Router();
  *       500:
  *         description: Unexpected error
  */
-router.post("/movies", authMiddleware, validate(newMovieSchema), addMovie);
+router.post("/", authMiddleware, validate(newMovieSchema), addMovie);
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ router.post("/movies", authMiddleware, validate(newMovieSchema), addMovie);
  *       500:
  *         description: Unexpected error
  */
-router.get("/movies", authMiddleware, getMovies);
+router.get("/", authMiddleware, getMovies);
 
 /**
  * @swagger
@@ -107,7 +107,7 @@ router.get("/movies", authMiddleware, getMovies);
  *       500:
  *         description: Unexpected error
  */
-router.get("/movies/:username/:id", getPublicMovie);
+router.get("/:username/:id", getPublicMovie);
 
 /**
  * @swagger
@@ -131,7 +131,7 @@ router.get("/movies/:username/:id", getPublicMovie);
  *       500:
  *         description: Unexpected error
  */
-router.get("/movies/:id", authMiddleware, getMovie);
+router.get("/:id", authMiddleware, getMovie);
 
 /**
  * @swagger
@@ -185,12 +185,7 @@ router.get("/movies/:id", authMiddleware, getMovie);
  *       500:
  *         description: Unexpected error
  */
-router.put(
-  "/movies/:id",
-  authMiddleware,
-  validate(newMovieSchema),
-  updateMovie,
-);
+router.put("/:id", authMiddleware, validate(newMovieSchema), updateMovie);
 
 /**
  * @swagger
@@ -214,6 +209,6 @@ router.put(
  *       500:
  *         description: Unexpected error
  */
-router.delete("/movies/:id", authMiddleware, deleteMovie);
+router.delete("/:id", authMiddleware, deleteMovie);
 
 export default router;
