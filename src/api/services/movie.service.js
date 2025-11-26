@@ -100,6 +100,14 @@ const updateMovie = async ({ movieId, userId, movie }) => {
         ...movie,
         rating: movie.hasOwnProperty("rating") ? movie.rating : null,
       },
+      include: {
+        lists: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       omit: { userId },
     });
 
