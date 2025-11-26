@@ -4,6 +4,7 @@ import {
   getMovies,
   getMovie,
   getPublicMovie,
+  updateMovie,
 } from "../controllers/movie.controller.js";
 import { newMovieSchema } from "../schemas/movie.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
@@ -88,10 +89,12 @@ router.get("/movies", authMiddleware, getMovies);
  *     summary: Get public user movie by id
  *     parameters:
  *       - in: path
+ *         required: true
  *         name: username
  *         schema:
  *           type: string
  *       - in: path
+ *         required: true
  *         name: id
  *         schema:
  *           type: number
@@ -115,6 +118,7 @@ router.get("/movies/:username/:id", getPublicMovie);
  *       - BearerAuth: []
  *     parameters:
  *       - in: path
+ *         required: true
  *         name: id
  *         schema:
  *           type: number
@@ -127,5 +131,64 @@ router.get("/movies/:username/:id", getPublicMovie);
  *         description: Unexpected error
  */
 router.get("/movies/:id", authMiddleware, getMovie);
+
+/**
+ * @swagger
+ * /api/movies/{id}:
+ *   put:
+ *     tags: [Movie]
+ *     summary: Update movie
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         required: true
+ *         name: id
+ *         schema:
+ *           type: number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - genre
+ *               - img
+ *               - year
+ *               - public
+ *             properties:
+ *               name:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               img:
+ *                 type: string
+ *               year:
+ *                 type: number
+ *               public:
+ *                 type: boolean
+ *                 default: false
+ *               rating:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Movie updated successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Movie not found
+ *       409:
+ *         description: Movie with that name already exists
+ *       500:
+ *         description: Unexpected error
+ */
+router.put(
+  "/movies/:id",
+  authMiddleware,
+  validate(newMovieSchema),
+  updateMovie,
+);
 
 export default router;

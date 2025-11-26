@@ -1,7 +1,7 @@
 import { PrismaClient } from "./../../../generated/prisma/client.js";
 import errorCodes from "./../../constants/errorCodes.enum.js";
 
-const { PRISMA_DUPLICATE } = errorCodes;
+const { PRISMA_DUPLICATE, PRISMA_NOT_FOUND } = errorCodes;
 
 const prisma = new PrismaClient();
 
@@ -92,9 +92,41 @@ const getPublicMovie = async ({ username, movieId }) => {
   }
 };
 
+const updateMovie = async ({ movieId, userId, movie }) => {
+  try {
+    const updatedMovie = await prisma.movie.update({
+      where: { id: movieId, userId },
+      data: {
+        ...movie,
+        rating: movie.hasOwnProperty("rating") ? movie.rating : null,
+      },
+      omit: { userId },
+    });
+
+    return updatedMovie;
+  } catch (err) {
+    if (err.code === PRISMA_NOT_FOUND) {
+      const error = new Error("Movie not found");
+      error.status = 404;
+
+      throw error;
+    }
+
+    if (err.code === PRISMA_DUPLICATE) {
+      const error = new Error("Movie with that name already exists");
+      error.status = 409;
+
+      throw error;
+    }
+
+    throw err;
+  }
+};
+
 export default {
   addMovie,
   getMovies,
   getMovie,
   getPublicMovie,
+  updateMovie,
 };
