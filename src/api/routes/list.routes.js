@@ -6,6 +6,7 @@ import {
   removeMovieFromList,
   getAvailableLists,
   updateListName,
+  deleteList,
 } from "../controllers/list.controller.js";
 import { newListSchema } from "../schemas/list.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
@@ -184,5 +185,29 @@ router.post("/:listId/:movieId", authMiddleware, addMovieToList);
  *         description: Unexpected error
  */
 router.put("/:id", authMiddleware, validate(newListSchema), updateListName);
+
+/**
+ * @swagger
+ * /api/lists/{id}:
+ *   delete:
+ *     tags: [List]
+ *     summary: Delete list
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         required: true
+ *         name: id
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: List deleted
+ *       404:
+ *         description: List not found
+ *       500:
+ *         description: Unexpected error
+ */
+router.delete("/:id", authMiddleware, deleteList);
 
 export default router;

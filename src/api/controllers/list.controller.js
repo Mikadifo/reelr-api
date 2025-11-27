@@ -84,3 +84,15 @@ export const updateListName = async (req, res, next) => {
     next(err);
   }
 };
+
+export const deleteList = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    await listService.deleteList(id, req.user.userId);
+
+    res.json("List deleted successfully");
+  } catch (err) {
+    next(err);
+  }
+};

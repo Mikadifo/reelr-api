@@ -193,6 +193,24 @@ const updateListName = async (listId, name, userId) => {
   }
 };
 
+const deleteList = async (listId, userId) => {
+  try {
+    await prisma.list.delete({
+      where: {
+        id: listId,
+        userId,
+      },
+    });
+  } catch (err) {
+    if (err.code === PRISMA_NOT_FOUND) {
+      const error = new Error("List not found");
+      error.status = 404;
+
+      throw error;
+    }
+  }
+};
+
 export default {
   getLists,
   getAvailableLists,
@@ -200,4 +218,5 @@ export default {
   removeMovieFromList,
   addMovieToList,
   updateListName,
+  deleteList,
 };
