@@ -27,6 +27,11 @@ const addList = async (list) => {
   try {
     return await prisma.list.create({
       data: list,
+      include: {
+        movies: {
+          omit: { userId: true },
+        },
+      },
       omit: { userId: true },
     });
   } catch (err) {
