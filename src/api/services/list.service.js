@@ -154,10 +154,50 @@ const removeMovieFromList = async (listId, movieId, userId) => {
   }
 };
 
+const updateListName = async (listId, name, userId) => {
+  try {
+    const updatedList = await prisma.list.update({
+      where: {
+        id: listId,
+        userId,
+      },
+      include: {
+        movies: {
+          omit: { userId: true },
+        },
+      },
+      data: {
+        name,
+      },
+
+      omit: { userId: true },
+    });
+
+    return updatedList;
+  } catch (err) {
+    if (err.code === PRISMA_NOT_FOUND) {
+      const error = new Error("List not found");
+      error.status = 404;
+
+      throw error;
+    }
+
+    if (err.code === PRISMA_DUPLICATE) {
+      const error = new Error("List with that name already exists");
+      error.status = 409;
+
+      throw error;
+    }
+
+    throw err;
+  }
+};
+
 export default {
   getLists,
   getAvailableLists,
   addList,
   removeMovieFromList,
   addMovieToList,
+  updateListName,
 };

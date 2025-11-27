@@ -68,3 +68,19 @@ export const removeMovieFromList = async (req, res, next) => {
     next(err);
   }
 };
+
+export const updateListName = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    const list = await listService.updateListName(
+      id,
+      req.body.name,
+      req.user.userId,
+    );
+
+    res.json(list);
+  } catch (err) {
+    next(err);
+  }
+};
