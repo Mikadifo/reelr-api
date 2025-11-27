@@ -6,6 +6,7 @@ import {
   getPublicMovie,
   updateMovie,
   deleteMovie,
+  getUnlistedMovies,
 } from "../controllers/movie.controller.js";
 import { newMovieSchema } from "../schemas/movie.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
@@ -81,6 +82,24 @@ router.post("/", authMiddleware, validate(newMovieSchema), addMovie);
  *         description: Unexpected error
  */
 router.get("/", authMiddleware, getMovies);
+
+/**
+ * @swagger
+ * /api/movies/unlisted:
+ *   get:
+ *     tags: [Movie]
+ *     summary: Get user movies with no lists
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Movies fetched successfully
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Unexpected error
+ */
+router.get("/unlisted", authMiddleware, getUnlistedMovies);
 
 /**
  * @swagger

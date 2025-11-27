@@ -36,6 +36,18 @@ const getMovies = async ({ userId }) => {
   }
 };
 
+const getUnlistedMovies = async ({ userId }) => {
+  try {
+    const movies = await prisma.movie.findMany({
+      where: { userId, lists: { none: {} } },
+    });
+
+    return movies;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getMovie = async ({ userId, movieId }) => {
   try {
     const movie = await prisma.movie.findUnique({
@@ -151,6 +163,7 @@ const deleteMovie = async ({ movieId, userId }) => {
 export default {
   addMovie,
   getMovies,
+  getUnlistedMovies,
   getMovie,
   getPublicMovie,
   updateMovie,

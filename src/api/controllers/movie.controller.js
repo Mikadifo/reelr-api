@@ -23,6 +23,18 @@ export const getMovies = async (req, res, next) => {
   }
 };
 
+export const getUnlistedMovies = async (req, res, next) => {
+  try {
+    const movies = await movieService.getUnlistedMovies({
+      userId: req.user.userId,
+    });
+
+    res.json(movies);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getMovie = async (req, res, next) => {
   try {
     const movieId = Number(req.params.id);
