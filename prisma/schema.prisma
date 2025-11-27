@@ -15,16 +15,20 @@ datasource db {
 }
 
 model List {
-    id     Int     @id @default(autoincrement())
-    name   String  @unique
-    public Boolean @default(false)
+    id   Int    @id @default(autoincrement())
+    name String
+
+    userId Int
+    user   User @relation(fields: [userId], references: [id])
 
     movies Movie[]
+
+    @@unique([name, userId])
 }
 
 model Movie {
     id     Int     @id @default(autoincrement())
-    name   String  @unique
+    name   String
     genre  String
     public Boolean @default(false)
     img    String
@@ -35,6 +39,8 @@ model Movie {
     user   User @relation(fields: [userId], references: [id])
 
     lists List[]
+
+    @@unique([name, userId])
 }
 
 model User {
@@ -44,4 +50,5 @@ model User {
     password String
 
     movies Movie[]
+    lists  List[]
 }
