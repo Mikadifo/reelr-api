@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   addMovie,
+  addMovieWithListId,
   getMovies,
   getMovie,
   getPublicMovie,
@@ -64,6 +65,64 @@ const router = Router();
  *         description: Unexpected error
  */
 router.post("/", authMiddleware, validate(newMovieSchema), addMovie);
+
+/**
+ * @swagger
+ * /api/movies/{listId}:
+ *   post:
+ *     tags: [Movie]
+ *     summary: Add new movie
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         required: true
+ *         name: listId
+ *         schema:
+ *           type: number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - genre
+ *               - img
+ *               - year
+ *             properties:
+ *               name:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               img:
+ *                 type: string
+ *               year:
+ *                 type: number
+ *               public:
+ *                 type: boolean
+ *                 default: false
+ *               rating:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Movie created successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: List not found
+ *       409:
+ *         description: Movie with that name already exists
+ *       500:
+ *         description: Unexpected error
+ */
+router.post(
+  "/:listId",
+  authMiddleware,
+  validate(newMovieSchema),
+  addMovieWithListId,
+);
 
 /**
  * @swagger

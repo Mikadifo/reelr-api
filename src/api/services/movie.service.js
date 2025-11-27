@@ -24,6 +24,41 @@ const addMovie = async (movie) => {
   }
 };
 
+const addMovieWithListId = async (movie, listId) => {
+  try {
+    const list = await prisma.list.findUnique({
+      where: { id: listId, userId: movie.userId },
+    });
+
+    if (!list) {
+      const error = new Error("List not found");
+      error.status = 404;
+
+      throw error;
+    }
+
+    const newMovie = await prisma.movie.create({
+      data: {
+        ...movie,
+        lists: {
+          connect: { id: listId },
+        },
+      },
+    });
+
+    return newMovie;
+  } catch (err) {
+    if (err.code === PRISMA_DUPLICATE) {
+      const error = new Error("Movie with that name already exists");
+      error.status = 409;
+
+      throw error;
+    }
+
+    throw err;
+  }
+};
+
 const getMovies = async ({ userId }) => {
   try {
     const movies = await prisma.movie.findMany({
@@ -162,6 +197,7 @@ const deleteMovie = async ({ movieId, userId }) => {
 
 export default {
   addMovie,
+  addMovieWithListId,
   getMovies,
   getUnlistedMovies,
   getMovie,

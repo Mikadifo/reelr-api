@@ -13,6 +13,24 @@ export const addMovie = async (req, res, next) => {
   }
 };
 
+export const addMovieWithListId = async (req, res, next) => {
+  try {
+    const listId = Number(req.params.listId);
+
+    const movie = await movieService.addMovieWithListId(
+      {
+        ...req.body,
+        userId: req.user.userId,
+      },
+      listId,
+    );
+
+    res.status(201).json(movie);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getMovies = async (req, res, next) => {
   try {
     const movies = await movieService.getMovies({ userId: req.user.userId });
