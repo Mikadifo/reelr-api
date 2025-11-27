@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addList } from "../controllers/list.controller.js";
+import { addList, getLists } from "../controllers/list.controller.js";
 import { newListSchema } from "../schemas/list.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
 import authMiddleware from "../../middlewares/auth.middleware.js";
@@ -42,5 +42,23 @@ const router = Router();
  *         description: Unexpected error
  */
 router.post("/", authMiddleware, validate(newListSchema), addList);
+
+/**
+ * @swagger
+ * /api/lists:
+ *   get:
+ *     tags: [List]
+ *     summary: Get user lists
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lists fetched successfully
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Unexpected error
+ */
+router.get("/", authMiddleware, getLists);
 
 export default router;

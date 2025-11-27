@@ -5,10 +5,25 @@ const { PRISMA_DUPLICATE } = errorCodes;
 
 const prisma = new PrismaClient();
 
+const getLists = async ({ userId }) => {
+  try {
+    const lists = await prisma.list.findMany({
+      where: { userId },
+    });
+
+    return lists;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const addList = async (list) => {
   try {
     return await prisma.list.create({
       data: list,
+      include: {
+        movies: {},
+      },
       omit: { userId: true },
     });
   } catch (err) {
@@ -24,5 +39,6 @@ const addList = async (list) => {
 };
 
 export default {
+  getLists,
   addList,
 };
