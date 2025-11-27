@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { addList, getLists } from "../controllers/list.controller.js";
+import {
+  addList,
+  getLists,
+  removeMovieFromList,
+} from "../controllers/list.controller.js";
 import { newListSchema } from "../schemas/list.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
 import authMiddleware from "../../middlewares/auth.middleware.js";
@@ -60,5 +64,36 @@ router.post("/", authMiddleware, validate(newListSchema), addList);
  *         description: Unexpected error
  */
 router.get("/", authMiddleware, getLists);
+
+/**
+ * @swagger
+ * /api/lists/{listId}/{movieId}:
+ *   put:
+ *     tags: [List]
+ *     summary: Remove movie from list
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         required: true
+ *         name: listId
+ *         schema:
+ *           type: number
+ *       - in: path
+ *         required: true
+ *         name: movieId
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Movie removed from list
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Movie not found
+ *       500:
+ *         description: Unexpected error
+ */
+router.put("/:listId/:movieId", authMiddleware, removeMovieFromList);
 
 export default router;
