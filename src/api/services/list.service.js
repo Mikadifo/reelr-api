@@ -101,11 +101,6 @@ const addMovieToList = async (listId, movieId, userId) => {
           connect: { id: movieId },
         },
       },
-      include: {
-        movies: {
-          omit: { userId: true },
-        },
-      },
       omit: { userId: true },
     });
 
