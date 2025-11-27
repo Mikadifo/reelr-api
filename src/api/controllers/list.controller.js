@@ -23,6 +23,23 @@ export const addList = async (req, res, next) => {
   }
 };
 
+export const addMovieToList = async (req, res, next) => {
+  try {
+    const listId = Number(req.params.listId);
+    const movieId = Number(req.params.movieId);
+
+    const list = await listService.addMovieToList(
+      listId,
+      movieId,
+      req.user.userId,
+    );
+
+    res.json(list);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const removeMovieFromList = async (req, res, next) => {
   try {
     const listId = Number(req.params.listId);
