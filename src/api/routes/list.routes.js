@@ -4,6 +4,7 @@ import {
   addMovieToList,
   getLists,
   removeMovieFromList,
+  getAvailableLists,
 } from "../controllers/list.controller.js";
 import { newListSchema } from "../schemas/list.schema.js";
 import validate from "../../middlewares/validate.middleware.js";
@@ -59,12 +60,34 @@ router.post("/", authMiddleware, validate(newListSchema), addList);
  *     responses:
  *       200:
  *         description: Lists fetched successfully
- *       400:
- *         description: Validation error
  *       500:
  *         description: Unexpected error
  */
 router.get("/", authMiddleware, getLists);
+
+/**
+ * @swagger
+ * /api/lists/{movieId}:
+ *   get:
+ *     tags: [List]
+ *     summary: Get availabe lists for given movie id
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         required: true
+ *         name: movieId
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Lists fetched successfully
+ *       404:
+ *         description: Movie not found
+ *       500:
+ *         description: Unexpected error
+ */
+router.get("/:movieId", authMiddleware, getAvailableLists);
 
 /**
  * @swagger

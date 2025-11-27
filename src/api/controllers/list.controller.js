@@ -2,9 +2,21 @@ import listService from "../services/list.service.js";
 
 export const getLists = async (req, res, next) => {
   try {
-    const lists = await listService.getLists({ userId: req.user.userId });
+    const lists = await listService.getLists(req.user.userId);
 
     res.status(201).json(lists);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getAvailableLists = async (req, res, next) => {
+  try {
+    const movieId = Number(req.params.movieId);
+
+    const lists = await listService.getAvailableLists(movieId, req.user.userId);
+
+    res.json(lists);
   } catch (err) {
     next(err);
   }

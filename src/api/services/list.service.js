@@ -5,7 +5,7 @@ const { PRISMA_DUPLICATE, PRISMA_NOT_FOUND } = errorCodes;
 
 const prisma = new PrismaClient();
 
-const getLists = async ({ userId }) => {
+const getLists = async (userId) => {
   try {
     const lists = await prisma.list.findMany({
       where: { userId },
@@ -15,6 +15,38 @@ const getLists = async ({ userId }) => {
         },
       },
       omit: { userId: true },
+    });
+
+    return lists;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getAvailableLists = async (movieId, userId) => {
+  try {
+    const movie = await prisma.movie.findUnique({
+      where: { id: movieId, userId },
+    });
+
+    if (!movie) {
+      const error = new Error("Movie not found");
+      error.status = 404;
+
+      throw error;
+    }
+
+    const lists = await prisma.list.findMany({
+      where: {
+        userId,
+        movies: {
+          none: { id: movieId },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
     });
 
     return lists;
@@ -129,6 +161,7 @@ const removeMovieFromList = async (listId, movieId, userId) => {
 
 export default {
   getLists,
+  getAvailableLists,
   addList,
   removeMovieFromList,
   addMovieToList,
