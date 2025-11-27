@@ -9,6 +9,12 @@ const getLists = async ({ userId }) => {
   try {
     const lists = await prisma.list.findMany({
       where: { userId },
+      include: {
+        movies: {
+          omit: { userId: true },
+        },
+      },
+      omit: { userId: true },
     });
 
     return lists;
@@ -21,9 +27,6 @@ const addList = async (list) => {
   try {
     return await prisma.list.create({
       data: list,
-      include: {
-        movies: {},
-      },
       omit: { userId: true },
     });
   } catch (err) {
